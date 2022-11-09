@@ -40,7 +40,17 @@ export default function VideoUploadPage() {
     axios.post("/api/video/upload", formData, config).then((res) => {
       console.log(res.data);
       if (res.data.success) {
-        alert("비디오 업로드 성공");
+        let variable = {
+          url: res.data.filePath,
+          fileName: res.data.fileName,
+        };
+        axios.post("/api/video/thumbnail", variable).then((response) => {
+          if (response.data.success) {
+            console.log(response.data);
+          } else {
+            alert("썸네일 에러 발생");
+          }
+        });
       } else {
         alert("비디오 업로드 실패");
       }
