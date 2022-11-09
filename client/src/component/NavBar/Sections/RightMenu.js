@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
-import { Menu } from "antd";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import Nav from 'react-bootstrap/Nav';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 function RightMenu(props) {
   const [userIn, setUserIn] = useState(true);
@@ -10,28 +11,41 @@ function RightMenu(props) {
   }, []);
 
   return (
-    <Menu mode={props.mode}>
+    <>
       {userIn ? (
         <>
-          <Menu.Item key="mail">
-            <Link to="/login">Signin</Link>
-          </Menu.Item>
-          <Menu.Item key="app">
-            <Link to="/register">Signup</Link>
-          </Menu.Item>
+          <Nav.Link href='#'>
+            <StyledLink to={'/login'}>Login</StyledLink>
+          </Nav.Link>
+          <Nav.Link eventKey={2} href='#'>
+            <StyledLink to={'/register'}>Signup</StyledLink>
+          </Nav.Link>
         </>
       ) : (
         <>
-          <Menu.Item key="upload">
-            <Link to="/video/upload">Upload</Link>
-          </Menu.Item>
-          <Menu.Item key="logout">
-            <a>Logout</a>
-          </Menu.Item>
+          <Nav.Link href='#'>
+            <StyledLink to={'/video/upload'}>Upload</StyledLink>
+          </Nav.Link>
+          <Nav.Link eventKey={2} href='/register'>
+            Logout
+          </Nav.Link>
         </>
       )}
-    </Menu>
+    </>
   );
 }
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: #9b9d9e;
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    color: #9b9d9e;
+    text-decoration: none;
+  }
+`;
 
 export default RightMenu;

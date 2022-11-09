@@ -1,5 +1,4 @@
 import React from 'react';
-import Icon from '@ant-design/icons';
 
 export default function Footer() {
   return (
@@ -13,9 +12,7 @@ export default function Footer() {
         fontSize: '1rem',
       }}
     >
-      <p>
-        Happy Coding <Icon type='smile' />
-      </p>
+      <p>Happy Coding</p>
     </div>
   );
 }

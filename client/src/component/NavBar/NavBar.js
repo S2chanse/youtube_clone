@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import LeftMenu from "./Sections/LeftMenu";
-import RightMenu from "./Sections/RightMenu";
-import { Drawer, Button } from "antd";
-import Icon from "@ant-design/icons";
+import React, { useState } from 'react';
+import RightMenu from './Sections/RightMenu';
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import { Link } from 'react-router-dom';
 
-import "./Sections/Navbar.css";
+import styled from 'styled-components';
+import './Sections/Navbar.css';
 
 function NavBar() {
   const [visible, setVisible] = useState(false);
@@ -18,41 +21,53 @@ function NavBar() {
   };
 
   return (
-    <nav
-      className="menu"
-      style={{ position: "fixed", zIndex: 5, width: "100%" }}
-    >
-      <div className="menu__logo">
-        <a href="/">Logo</a>
-      </div>
-      <div className="menu__container">
-        <div className="menu_left">
-          <LeftMenu mode="horizontal" />
-        </div>
-        <div className="menu_rigth">
-          <RightMenu mode="horizontal" />
-        </div>
-        <Button
-          className="menu__mobile-button"
-          type="primary"
-          onClick={showDrawer}
-        >
-          <Icon type="align-right" />
-        </Button>
-        <Drawer
-          title="Basic Drawer"
-          placement="right"
-          className="menu_drawer"
-          // closable={false}
-          // onClose={onClose}
-          // open={visible}
-        >
-          <LeftMenu mode="inline" />
-          <RightMenu mode="inline" />
-        </Drawer>
-      </div>
-    </nav>
+    <>
+      <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
+        <Container>
+          <Navbar.Brand href='#'>
+            <StyledLink to={'/'}>Main</StyledLink>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls='responsive-navbar-nav' />
+          <Navbar.Collapse id='responsive-navbar-nav'>
+            <Nav className='me-auto'>
+              <Nav.Link href='#'>
+                <StyledLink to={'/'}>Home</StyledLink>
+              </Nav.Link>
+              <Nav.Link href='#pricing'>Pricing</Nav.Link>
+              <NavDropdown title='Dropdown' id='collasible-nav-dropdown'>
+                <NavDropdown.Item href='#action/3.1'>Action</NavDropdown.Item>
+                <NavDropdown.Item href='#action/3.2'>
+                  Another action
+                </NavDropdown.Item>
+                <NavDropdown.Item href='#action/3.3'>
+                  Something
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href='#action/3.4'>
+                  Separated link
+                </NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+            <Nav>
+              <RightMenu />
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </>
   );
 }
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: #9b9d9e;
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    color: #9b9d9e;
+    text-decoration: none;
+  }
+`;
 
 export default NavBar;

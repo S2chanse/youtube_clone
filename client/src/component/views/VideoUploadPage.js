@@ -1,66 +1,142 @@
-import { Button, Checkbox, Form, Input } from "antd";
-import TextArea from "antd/lib/input/TextArea";
-import Dropzone, { useDropzone } from "react-dropzone";
-import React, { useCallback } from "react";
-import Icon from "@ant-design/icons/lib/components/AntdIcon";
+import TextArea from 'antd/lib/input/TextArea';
+import Dropzone, { useDropzone } from 'react-dropzone';
+import React, { useState, useCallback, useEffect } from 'react';
+import { FiPlus } from 'react-icons/fi';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import { Input } from 'antd';
+import axios from 'axios';
 
 export default function VideoUploadPage() {
-  const onDrop = useCallback((acceptedFiles) => {
-    // Do something with the files
-    console.log(acceptedFiles);
-  }, []);
+  const Private = [
+    { value: 0, label: 'Private' },
+    { value: 1, label: 'Public' },
+  ];
+
+  const Catogories = [
+    { value: 0, label: 'Film & Animation' },
+    { value: 1, label: 'Autos & Vehicles' },
+    { value: 2, label: 'Music' },
+    { value: 3, label: 'Pets & Animals' },
+    { value: 4, label: 'Sports' },
+  ];
+
+  const [Title, setTitle] = useState('');
+  const [Description, setDescription] = useState('');
+  /**
+   * Private  : 0 else 1
+   */
+  const [Privacy, setPrivacy] = useState(0);
+  const [Category, setCategory] = useState(0);
+
+  const onDrop = (files) => {
+    console.log(files);
+    let formData = new FormData();
+    const config = {
+      header: { 'content-type': 'multipart/form-data' },
+    };
+    formData.append('file', files[0]);
+
+    axios.post('/api/video/upload', formData, config).then((res) => {
+      if (res.data.success) {
+        alert('비디오 업로드 성공');
+      } else {
+        alert('비디오 업로드 실패');
+      }
+    });
+  };
+
+  useEffect(() => {
+    console.log(`Title : ${Title},Privacy:${Privacy},Category:${Category}`);
+  }, [Title, Category, Privacy]);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   return (
-    <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
-      <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+    <div style={{ maxWidth: '700px', margin: '2rem auto' }}>
+      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <h3>Video UPload Page</h3>
-        <Form
-          name="basic"
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 16,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          autoComplete="off"
-        >
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <p>Drop the files here ...</p>
-              ) : (
-                <p>Drag 'n' drop some files here, or click to select files</p>
+        <Form name='basic'>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            {/**
+             * multiple : 파일 여러개? 여러개 : 단일
+             */}
+            <Dropzone onDrop={onDrop} multiple={false} maxSize={1000000000}>
+              {({ getRootProps, getInputProps }) => (
+                <div
+                  style={{
+                    width: '300px',
+                    height: '240px',
+                    border: '1px solid lightgray',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  {...getRootProps()}
+                >
+                  <input {...getInputProps()} />
+                  <FiPlus type='plus' style={{ fontSize: '3rem' }} />
+                </div>
               )}
-            </div>
+            </Dropzone>
             {/* Thumbnail */}
-            <div>
-              <img src alt="" />
-            </div>
+            <div>{/* <img src='' alt='' /> */}</div>
           </div>
           <br />
           <br />
           <label>Title</label>
-          <Input />
+          <Input
+            value={Title}
+            onChange={(e) => {
+              setTitle(e.currentTarget.value);
+            }}
+          />
           <br />
           <br />
           <label>Description</label>
-          <TextArea />
+          <TextArea
+            value={Description}
+            onChange={(e) => setDescription(e.currentTarget.value)}
+          />
           <br />
           <br />
 
-          <select></select>
+          <Form.Select
+            aria-label='Default select example'
+            onChange={(e) => {
+              setPrivacy(e.currentTarget.value);
+            }}
+          >
+            {Private.map((item, index) => {
+              return (
+                <option value={item.value} key={index}>
+                  {item.label}
+                </option>
+              );
+            })}
+          </Form.Select>
           <br />
           <br />
 
-          <select></select>
+          <Form.Select
+            aria-label='Default select example'
+            onChange={(e) => {
+              setCategory(e.currentTarget.value);
+            }}
+          >
+            {Catogories.map((category, index) => {
+              return (
+                <option value={category.value} key={index}>
+                  {category.label}
+                </option>
+              );
+            })}
+          </Form.Select>
           <br />
           <br />
 
-          <Button>Submit</Button>
+          <Button type='primary' size='large'>
+            Submit
+          </Button>
         </Form>
       </div>
     </div>
