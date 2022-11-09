@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from 'react';
-import Nav from 'react-bootstrap/Nav';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import Nav from "react-bootstrap/Nav";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 function RightMenu(props) {
   const [userIn, setUserIn] = useState(true);
@@ -14,19 +14,13 @@ function RightMenu(props) {
     <>
       {userIn ? (
         <>
-          <Nav.Link href='#'>
-            <StyledLink to={'/login'}>Login</StyledLink>
-          </Nav.Link>
-          <Nav.Link eventKey={2} href='#'>
-            <StyledLink to={'/register'}>Signup</StyledLink>
-          </Nav.Link>
+          <StyledLink to="/login">Login</StyledLink>
+          <StyledLink to="/register">Signup</StyledLink>
         </>
       ) : (
         <>
-          <Nav.Link href='#'>
-            <StyledLink to={'/video/upload'}>Upload</StyledLink>
-          </Nav.Link>
-          <Nav.Link eventKey={2} href='/register'>
+          <StyledLink to="/video/upload">Upload</StyledLink>
+          <Nav.Link eventKey={2} href="/register">
             Logout
           </Nav.Link>
         </>
@@ -38,6 +32,7 @@ function RightMenu(props) {
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: #9b9d9e;
+  padding-top: 9px;
   &:focus,
   &:hover,
   &:visited,
