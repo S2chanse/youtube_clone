@@ -23,6 +23,7 @@ export default function VideoUploadPage() {
 
   const [Title, setTitle] = useState('');
   const [Description, setDescription] = useState('');
+  const [thumnail, setThumnail] = useState('');
   /**
    * Private  : 0 else 1
    */
@@ -48,7 +49,9 @@ export default function VideoUploadPage() {
           };
           axios.post('/api/video/thumbnail', body).then((response) => {
             if (response.data.success) {
+              alert('비디오 업로드');
               console.log(response.data);
+              setThumnail(response.data.thumbsFilePath);
             } else {
               alert('썸네일 에러 발생');
             }
@@ -95,7 +98,18 @@ export default function VideoUploadPage() {
               )}
             </Dropzone>
             {/* Thumbnail */}
-            <div>{/* <img src='' alt='' /> */}</div>
+            <div
+              style={{
+                width: '300px',
+                height: '240px',
+                border: '1px solid lightgray',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <img src={`http://localhost:5000/${thumnail}`} alt='Thumnail' />
+            </div>
           </div>
           <br />
           <br />
