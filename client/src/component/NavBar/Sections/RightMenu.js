@@ -6,9 +6,6 @@ import styled from "styled-components";
 
 function RightMenu(props) {
   const [userIn, setUserIn] = useState(true);
-  useEffect(() => {
-    setUserIn(false);
-  }, []);
 
   return (
     <>
@@ -16,10 +13,10 @@ function RightMenu(props) {
         <>
           <StyledLink to="/login">Login</StyledLink>
           <StyledLink to="/register">Signup</StyledLink>
+          <StyledLink to="/video/upload">Upload</StyledLink>
         </>
       ) : (
         <>
-          <StyledLink to="/video/upload">Upload</StyledLink>
           <Nav.Link eventKey={2} href="/register">
             Logout
           </Nav.Link>
@@ -33,6 +30,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: #9b9d9e;
   padding-top: 9px;
+  margin-right: 2rem;
   &:focus,
   &:hover,
   &:visited,

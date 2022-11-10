@@ -1,45 +1,49 @@
-import TextArea from 'antd/lib/input/TextArea';
-import Dropzone, { useDropzone } from 'react-dropzone';
-import React, { useState, useCallback, useEffect } from 'react';
-import { FiPlus } from 'react-icons/fi';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import { Input } from 'antd';
-import axios from 'axios';
+import TextArea from "antd/lib/input/TextArea";
+import Dropzone, { useDropzone } from "react-dropzone";
+import React, { useState, useCallback, useEffect } from "react";
+import { FiPlus } from "react-icons/fi";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import { Input } from "antd";
+import { useNavigate } from "react-router";
+import axios from "axios";
 
 export default function VideoUploadPage() {
   const Private = [
-    { value: 0, label: 'Private' },
-    { value: 1, label: 'Public' },
+    { value: 0, label: "Private" },
+    { value: 1, label: "Public" },
   ];
 
   const Catogories = [
-    { value: 0, label: 'Film & Animation' },
-    { value: 1, label: 'Autos & Vehicles' },
-    { value: 2, label: 'Music' },
-    { value: 3, label: 'Pets & Animals' },
-    { value: 4, label: 'Sports' },
+    { value: 0, label: "Film & Animation" },
+    { value: 1, label: "Autos & Vehicles" },
+    { value: 2, label: "Music" },
+    { value: 3, label: "Pets & Animals" },
+    { value: 4, label: "Sports" },
   ];
 
-  const [Title, setTitle] = useState('');
-  const [Description, setDescription] = useState('');
-  const [thumnail, setThumnail] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [thumbnail, setThumbnail] = useState("");
+  const [duration, setDuration] = useState("");
+  const [filePath, setFilePath] = useState("");
   /**
    * Private  : 0 else 1
    */
-  const [Privacy, setPrivacy] = useState(0);
-  const [Category, setCategory] = useState(0);
+  const [privacy, setPrivacy] = useState(0);
+  const [category, setCategory] = useState(0);
 
+  const navigator = useNavigate();
   const onDrop = (files) => {
     console.log(files);
     let formData = new FormData();
     const config = {
-      header: { 'content-type': 'multipart/form-data' },
+      header: { "content-type": "multipart/form-data" },
     };
-    formData.append('file', files[0]);
+    formData.append("file", files[0]);
 
     axios
-      .post('/api/video/upload', formData, config)
+      .post("/api/video/upload", formData, config)
       .then((res) => {
         console.log(res.data);
         if (res.data.success) {
@@ -47,35 +51,68 @@ export default function VideoUploadPage() {
             url: res.data.filePath,
             fileName: res.data.fileName,
           };
-          axios.post('/api/video/thumbnail', body).then((response) => {
+          setFilePath(res.data.filePath);
+          axios.post("/api/video/thumbnail", body).then((response) => {
             if (response.data.success) {
-              alert('비디오 업로드');
+              alert("비디오 업로드");
               console.log(response.data);
-              setThumnail(response.data.thumbsFilePath);
+              setThumbnail(response.data.thumbsFilePath);
+              setDuration(response.data.fileDuration);
             } else {
-              alert('썸네일 에러 발생');
+              alert("썸네일 에러 발생");
             }
           });
         } else {
-          alert('비디오 업로드 실패');
+          alert("비디오 업로드 실패");
         }
       })
       .catch((err) => {
         console.log(err);
       });
   };
+  const onSubmit = (e) => {
+    e.preventDefault();
 
-  useEffect(() => {
-    console.log(`Title : ${Title},Privacy:${Privacy},Category:${Category}`);
-  }, [Title, Category, Privacy]);
+    let videoBody = {
+      title,
+      description,
+      privacy,
+      filePath,
+      category,
+      duration,
+      thumbnail,
+    };
+    let emptyCheck = false;
+    Object.entries(videoBody).forEach(([key, value]) => {
+      if (!emptyCheck && !value && (key !== "privacy" || key !== "category")) {
+        emptyCheck = true;
+        alert(`${key} 정보를 채워 주세요.`);
+      }
+    });
+    if (emptyCheck) {
+      return;
+    }
+    axios
+      .post("/api/video/infoUpload", videoBody)
+      .then((res) => {
+        if (res.data.success) {
+          alert("정보저장에 성공했습니다.");
+          navigator("/");
+        }
+      })
+      .catch((err) => {
+        alert("동영상 정보 저장에 실패했습니다.");
+        console.err(err);
+      });
+  };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   return (
-    <div style={{ maxWidth: '700px', margin: '2rem auto' }}>
-      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+    <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
+      <div style={{ textAlign: "center", marginBottom: "2rem" }}>
         <h3>Video UPload Page</h3>
-        <Form name='basic'>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Form name="basic">
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             {/**
              * multiple : 파일 여러개? 여러개 : 단일
              */}
@@ -83,39 +120,44 @@ export default function VideoUploadPage() {
               {({ getRootProps, getInputProps }) => (
                 <div
                   style={{
-                    width: '300px',
-                    height: '240px',
-                    border: '1px solid lightgray',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    width: "300px",
+                    height: "240px",
+                    border: "1px solid lightgray",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                   {...getRootProps()}
                 >
                   <input {...getInputProps()} />
-                  <FiPlus type='plus' style={{ fontSize: '3rem' }} />
+                  <FiPlus type="plus" style={{ fontSize: "3rem" }} />
                 </div>
               )}
             </Dropzone>
             {/* Thumbnail */}
-            <div
-              style={{
-                width: '300px',
-                height: '240px',
-                border: '1px solid lightgray',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <img src={`http://localhost:5000/${thumnail}`} alt='Thumnail' />
-            </div>
+            {thumbnail && (
+              <div
+                style={{
+                  width: "300px",
+                  height: "240px",
+                  border: "1px solid lightgray",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <img
+                  src={`http://localhost:5000/${thumbnail}`}
+                  alt="thumbnail"
+                />
+              </div>
+            )}
           </div>
           <br />
           <br />
           <label>Title</label>
           <Input
-            value={Title}
+            value={title}
             onChange={(e) => {
               setTitle(e.currentTarget.value);
             }}
@@ -124,14 +166,14 @@ export default function VideoUploadPage() {
           <br />
           <label>Description</label>
           <TextArea
-            value={Description}
+            value={description}
             onChange={(e) => setDescription(e.currentTarget.value)}
           />
           <br />
           <br />
 
           <Form.Select
-            aria-label='Default select example'
+            aria-label="Default select example"
             onChange={(e) => {
               setPrivacy(e.currentTarget.value);
             }}
@@ -148,7 +190,7 @@ export default function VideoUploadPage() {
           <br />
 
           <Form.Select
-            aria-label='Default select example'
+            aria-label="Default select example"
             onChange={(e) => {
               setCategory(e.currentTarget.value);
             }}
@@ -164,7 +206,7 @@ export default function VideoUploadPage() {
           <br />
           <br />
 
-          <Button type='primary' size='large'>
+          <Button type="primary" size="large" onClick={(e) => onSubmit(e)}>
             Submit
           </Button>
         </Form>
