@@ -5,7 +5,6 @@ const multer = require("multer");
 const path = require("path");
 const ffmpeg = require("fluent-ffmpeg");
 const { fail } = require("assert");
-const userId = "6363176a21cf543a1e9db08f";
 
 //=================================
 //             User
@@ -88,7 +87,6 @@ router.post("/thumbnail", (req, res) => {
 //video 정보 저장
 router.post("/infoUpload", (req, res) => {
   let videoInfo = req.body;
-  videoInfo.userId = userId;
   console.log(videoInfo);
   const videoInfoModel = new Video(videoInfo);
   videoInfoModel.save((err, doc) => {

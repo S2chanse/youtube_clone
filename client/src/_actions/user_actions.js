@@ -3,7 +3,6 @@ import { LOGIN_USER, REGISTER_USER, AUTH_USER, LOGOUT_USER } from "./types";
 import { USER_SERVER } from "../Config.js";
 
 export function registerUser(dataToSubmit) {
-  console.log("등록값", dataToSubmit);
   const request = axios
     .post(`${USER_SERVER}/register`, dataToSubmit)
     .then((response) => response.data);

@@ -7,13 +7,14 @@ import Button from "react-bootstrap/Button";
 import { Input } from "antd";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function VideoUploadPage() {
   const Private = [
     { value: 0, label: "Private" },
     { value: 1, label: "Public" },
   ];
-
+  const user = useSelector((state) => state.user);
   const Catogories = [
     { value: 0, label: "Film & Animation" },
     { value: 1, label: "Autos & Vehicles" },
@@ -81,6 +82,7 @@ export default function VideoUploadPage() {
       category,
       duration,
       thumbnail,
+      useId: user.loginSucces.userId,
     };
     let emptyCheck = false;
     Object.entries(videoBody).forEach(([key, value]) => {

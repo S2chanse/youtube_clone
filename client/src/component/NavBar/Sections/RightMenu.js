@@ -1,23 +1,36 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
 import Nav from "react-bootstrap/Nav";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { USER_SERVER } from "../../../Config";
 
 function RightMenu(props) {
-  const [userIn, setUserIn] = useState(true);
+  const user = useSelector((state) => state.user);
+
+  const logoutHandler = () => {
+    axios.get(`${USER_SERVER}/logout`).then((response) => {
+      if (response.status === 200) {
+        props.history.push("/login");
+      } else {
+        alert("Log Out Failed");
+      }
+    });
+  };
 
   return (
     <>
-      {userIn ? (
+      {user.userData && !user.userData.isAuth ? (
         <>
           <StyledLink to="/login">Login</StyledLink>
           <StyledLink to="/register">Signup</StyledLink>
-          <StyledLink to="/video/upload">Upload</StyledLink>
         </>
       ) : (
         <>
-          <Nav.Link eventKey={2} href="/register">
+          <StyledLink to="/video/upload">Upload</StyledLink>
+          <Nav.Link eventKey={2} href="#" onClick={logoutHandler}>
             Logout
           </Nav.Link>
         </>

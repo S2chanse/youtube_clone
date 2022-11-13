@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Icon from "@ant-design/icons";
-// import { loginUser } from "../../../_actions/user_actions";
+
+import { AiFillLock, AiOutlineUser } from "react-icons/ai";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Form, Input, Button, Checkbox, Typography } from "antd";
@@ -90,7 +90,7 @@ function LoginPage(props) {
                 <Input
                   id="email"
                   prefix={
-                    <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                    <AiOutlineUser style={{ color: "rgba(0,0,0,.25)" }} />
                   }
                   placeholder="Enter your email"
                   type="email"
@@ -111,9 +111,7 @@ function LoginPage(props) {
               <Form.Item required>
                 <Input
                   id="password"
-                  prefix={
-                    <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
-                  }
+                  prefix={<AiFillLock style={{ color: "rgba(0,0,0,.25)" }} />}
                   placeholder="Enter your password"
                   type="password"
                   value={values.password}
