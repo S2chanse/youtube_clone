@@ -5,6 +5,7 @@ import NavBar from "./component/NavBar/NavBar";
 import LoginPage from "./component/LoginPage/LoginPage";
 import RegisterPage from "./component/RegisterPage/RegisterPage";
 import VideoUploadPage from "./component/views/VideoUploadPage";
+import VideoDetailPage from "./component/views/VideoDetailPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/video/upload" element={<VideoUploadPage />} />
+        <Route path="/video/detail/:videoId" element={<VideoDetailPage />} />
       </Routes>
       <Footer />
     </div>

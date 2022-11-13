@@ -99,4 +99,31 @@ router.post("/infoUpload", (req, res) => {
   });
   res.status(200).json({ success: true });
 });
+//비디오 리스트 가져와서 보낸다.
+router.get("/getVideos", (req, res) => {
+  Video.find()
+    .populate("writer")
+    .exec()
+    .then((doc) => {
+      console.log(doc);
+      return res.status(200).json({ success: true, videos: doc });
+    })
+    .catch((err) => {
+      return res.status(400).json({ success: fail, err });
+    });
+});
+
+router.post("/getVideoDetail", (req, res) => {
+  console.log(req.body);
+  Video.findOne({ _id: req.body.videoId })
+    .populate("writer")
+    .exec((err, doc) => {
+      console.log(err);
+      if (err) {
+        return res.status(400).json({ success: false, err });
+      }
+      console.log(doc);
+      return res.status(200).json({ success: true, video: doc });
+    });
+});
 module.exports = router;

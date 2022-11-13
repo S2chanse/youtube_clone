@@ -73,7 +73,7 @@ export default function VideoUploadPage() {
   };
   const onSubmit = (e) => {
     e.preventDefault();
-
+    console.log(user);
     let videoBody = {
       title,
       description,
@@ -82,7 +82,7 @@ export default function VideoUploadPage() {
       category,
       duration,
       thumbnail,
-      useId: user.loginSucces.userId,
+      writer: user.loginSucces.userId,
     };
     let emptyCheck = false;
     Object.entries(videoBody).forEach(([key, value]) => {
