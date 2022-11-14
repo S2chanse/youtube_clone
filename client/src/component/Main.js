@@ -28,7 +28,7 @@ export default function Main() {
     return (
       <Col lg={6} md={8} xs={24} key={index}>
         <div style={{ position: "relative" }}>
-          <Link to={`/video/detail/${video._id}`}>
+          <Link to={`/video/detail/${video._id}/${video.writer._id}`}>
             <img
               style={{ width: "100%" }}
               alt="thumbnail"

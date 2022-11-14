@@ -1,38 +1,47 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Nav from "react-bootstrap/Nav";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { USER_SERVER } from "../../../Config";
 
 function RightMenu(props) {
-  const user = useSelector((state) => state.user);
+  const naviate = useNavigate();
+  const [loginFlag, setLoginFlag] = useState(true);
 
   const logoutHandler = () => {
     axios.get(`${USER_SERVER}/logout`).then((response) => {
       if (response.status === 200) {
-        props.history.push("/login");
+        window.localStorage.setItem("userId", null);
+        setLoginFlag(false);
+        naviate("/login");
       } else {
         alert("Log Out Failed");
       }
     });
   };
 
+  useEffect(() => {
+    if (window.localStorage.getItem("userId") == null) {
+      setLoginFlag(false);
+    }
+  }, []);
+
   return (
     <>
-      {user.userData && !user.userData.isAuth ? (
-        <>
-          <StyledLink to="/login">Login</StyledLink>
-          <StyledLink to="/register">Signup</StyledLink>
-        </>
-      ) : (
+      {loginFlag ? (
         <>
           <StyledLink to="/video/upload">Upload</StyledLink>
           <Nav.Link eventKey={2} href="#" onClick={logoutHandler}>
             Logout
           </Nav.Link>
+        </>
+      ) : (
+        <>
+          <StyledLink to="/login">Login</StyledLink>
+          <StyledLink to="/register">Signup</StyledLink>
         </>
       )}
     </>

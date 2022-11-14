@@ -3,24 +3,27 @@ import { useParams } from "react-router";
 import { List, Avatar, Row, Col } from "antd";
 import axios from "axios";
 import SideVideo from "./Sections/SideVideo";
+import Subscribe from "./Sections/Subscribe";
 
 export default function VideoDetailPage() {
   let params = useParams();
   const [videoInfo, setVideoInfo] = useState({});
   useEffect(() => {
-    axios
-      .post("/api/video/getVideoDetail", params)
-      .then((res) => {
-        if (res.data.success) {
-          console.log(res.data.video);
-          setVideoInfo(res.data.video);
-        }
-      })
-      .catch((err) => {
-        alert(err);
-      });
+    console.log(params);
+    findVideo();
   }, []);
 
+  const findVideo = async () => {
+    try {
+      let res = await axios.post("/api/video/getVideoDetail", params);
+      if (res.data.success) {
+        console.log(res.data.video);
+        setVideoInfo(res.data.video);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Row gutter={[16, 16]}>
       <Col lg={18} xs={24}>
@@ -31,7 +34,7 @@ export default function VideoDetailPage() {
             alt="video"
             controls
           />
-          <List.Item actions={""}>
+          <List.Item actions={[<Subscribe userTo={params.writerId} />]}>
             <List.Item.Meta
               avatar={
                 <Avatar src={videoInfo.writer && videoInfo.writer.image} />
