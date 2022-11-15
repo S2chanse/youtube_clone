@@ -7,11 +7,9 @@ const { Subscriber } = require("../models/Subscriber");
 //=================================
 
 router.post("/subscribeNumber", (req, res) => {
-  console.log();
   Subscriber.find({ userTo: req.body.userTo })
     .exec()
     .then((subscribe) => {
-      console.log(subscribe);
       res.status(200).json({ success: true, subscribeCnt: subscribe.length });
     })
     .catch((err) => {

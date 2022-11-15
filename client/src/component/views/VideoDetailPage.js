@@ -34,7 +34,13 @@ export default function VideoDetailPage() {
             alt="video"
             controls
           />
-          <List.Item actions={[<Subscribe userTo={params.writerId} />]}>
+          <List.Item
+            actions={
+              params.writerId !== window.localStorage.getItem("userId")
+                ? [<Subscribe userTo={params.writerId} />]
+                : ""
+            }
+          >
             <List.Item.Meta
               avatar={
                 <Avatar src={videoInfo.writer && videoInfo.writer.image} />

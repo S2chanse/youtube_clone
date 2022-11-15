@@ -6,6 +6,7 @@ import LoginPage from "./component/LoginPage/LoginPage";
 import RegisterPage from "./component/RegisterPage/RegisterPage";
 import VideoUploadPage from "./component/views/VideoUploadPage";
 import VideoDetailPage from "./component/views/VideoDetailPage";
+import Subscription from "./component/views/SubscriptionPage/Subscription";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           path="/video/detail/:videoId/:writerId"
           element={<VideoDetailPage />}
         />
+        <Route path="/subscription" element={<Subscription />} />
       </Routes>
       <Footer />
     </div>

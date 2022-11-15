@@ -5,6 +5,7 @@ const multer = require("multer");
 const path = require("path");
 const ffmpeg = require("fluent-ffmpeg");
 const { fail } = require("assert");
+const { Subscriber } = require("../models/Subscriber");
 
 //=================================
 //             User
@@ -114,7 +115,6 @@ router.get("/getVideos", (req, res) => {
 });
 
 router.post("/getVideoDetail", (req, res) => {
-  console.log(req.body);
   Video.findOne({ _id: req.body.videoId })
     .populate("writer")
     .exec((err, doc) => {
@@ -125,5 +125,30 @@ router.post("/getVideoDetail", (req, res) => {
       //console.log(doc);
       return res.status(200).json({ success: true, video: doc });
     });
+});
+
+//비디오 리스트 가져와서 보낸다.
+router.post("/getSubscription", (req, res) => {
+  console.log(req.body);
+  Subscriber.find({ userFrom: req.body.userFrom }).exec((err, subscribInfo) => {
+    if (err) {
+      return res.status(400).json({ success: false, err });
+    }
+    let subscribers = [];
+    subscribInfo.map((subscrib, idx) => {
+      subscribers.push(subscrib.userTo);
+    });
+    console.log(subscribers);
+    Video.find({
+      writer: {
+        $in: subscribers,
+      },
+    })
+      .populate("writer")
+      .exec((err, videos) => {
+        if (err) return res.status(400).send(err);
+        res.status(200).json({ success: true, videos });
+      });
+  });
 });
 module.exports = router;
