@@ -4,6 +4,7 @@ import { List, Avatar, Row, Col } from "antd";
 import axios from "axios";
 import SideVideo from "./Sections/SideVideo";
 import Subscribe from "./Sections/Subscribe";
+import Comment from "./Sections/Comment";
 
 export default function VideoDetailPage() {
   let params = useParams();
@@ -49,6 +50,7 @@ export default function VideoDetailPage() {
               description={videoInfo.description}
             />
           </List.Item>
+          <Comment />
         </div>
       </Col>
       <Col lg={6} xs={24}>
