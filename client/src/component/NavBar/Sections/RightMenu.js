@@ -1,66 +1,64 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import axios from "axios";
-import React, { useState, useEffect } from "react";
-import Nav from "react-bootstrap/Nav";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { USER_SERVER } from "../../../Config";
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import Nav from 'react-bootstrap/Nav';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { USER_SERVER } from '../../../Config';
+import { clearUser } from '../../../_reducers/userSlice';
 
 function RightMenu(props) {
   const naviate = useNavigate();
-  const [loginFlag, setLoginFlag] = useState(true);
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const StyledLink = styled(Link)`
+    text-decoration: none;
+    color: #9b9d9e;
+    padding-top: 9px;
+    margin-right: 2rem;
+    &:focus,
+    &:hover,
+    &:visited,
+    &:link,
+    &:active {
+      color: #9b9d9e;
+      text-decoration: none;
+    }
+  `;
 
   const logoutHandler = () => {
     axios.get(`${USER_SERVER}/logout`).then((response) => {
       if (response.status === 200) {
-        window.localStorage.setItem("userId", null);
-        setLoginFlag(false);
-        naviate("/login");
+        window.localStorage.setItem('userId', null);
+        dispatch(clearUser());
+        naviate('/login');
       } else {
-        alert("Log Out Failed");
+        alert('Log Out Failed');
       }
     });
   };
 
-  useEffect(() => {
-    if (window.localStorage.getItem("userId") == null) {
-      setLoginFlag(false);
-    }
-  }, []);
+  useEffect(() => {}, [user]);
 
   return (
     <>
-      {loginFlag ? (
+      {!user.isLoading ? (
         <>
-          <StyledLink to="/video/upload">Upload</StyledLink>
-          <Nav.Link eventKey={2} href="#" onClick={logoutHandler}>
+          <StyledLink to='/video/upload'>Upload</StyledLink>
+          <Nav.Link eventKey={2} href='#' onClick={logoutHandler}>
             Logout
           </Nav.Link>
         </>
       ) : (
         <>
-          <StyledLink to="/login">Login</StyledLink>
-          <StyledLink to="/register">Signup</StyledLink>
+          <StyledLink to='/login'>Login</StyledLink>
+          <StyledLink to='/register'>Signup</StyledLink>
         </>
       )}
     </>
   );
 }
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: #9b9d9e;
-  padding-top: 9px;
-  margin-right: 2rem;
-  &:focus,
-  &:hover,
-  &:visited,
-  &:link,
-  &:active {
-    color: #9b9d9e;
-    text-decoration: none;
-  }
-`;
 
 export default RightMenu;
