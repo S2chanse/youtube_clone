@@ -12,6 +12,15 @@ export default function VideoDetailPage() {
   const [comments, setComments] = useState([]);
   useEffect(() => {
     findVideo();
+
+    axios.post('/api/comment/getComments', params).then((res) => {
+      if (res.data.success) {
+        console.log(res.data);
+        setComments(res.data.results);
+      } else {
+        alert('댓글 가져오는데 실패했습니다.');
+      }
+    });
   }, []);
 
   const findVideo = async () => {
@@ -50,7 +59,7 @@ export default function VideoDetailPage() {
               description={videoInfo.description}
             />
           </List.Item>
-          <Comment />
+          <Comment commentsList={comments} />;
         </div>
       </Col>
       <Col lg={6} xs={24}>

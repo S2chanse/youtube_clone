@@ -4,15 +4,13 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
+import SingleComment from './SingleComment';
 
-export default function Comment() {
+export default function Comment({ commentsList }) {
   const [content, setContent] = useState('');
   const user = useSelector((state) => state.user);
   let queryString = useParams();
 
-  const handleChange = (e) => {
-    setContent(e.currentTarget.value);
-  };
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -29,6 +27,7 @@ export default function Comment() {
       let res = await axios.post('/api/comment/saveComment', params);
 
       console.log(res.data);
+      setContent('');
     } catch (error) {
       console.log(error);
     }
@@ -39,6 +38,12 @@ export default function Comment() {
       <p> Replies</p>
       <hr />
       {/* Comment Lists  */}
+
+      {commentsList.map((comment, index) => {
+        return (
+          !comment.responseTo && <SingleComment comment={comment} key={index} />
+        );
+      })}
       {/* {console.log(props.CommentLists)}
 
             {props.CommentLists && props.CommentLists.map((comment, index) => (
@@ -54,7 +59,7 @@ export default function Comment() {
       <form style={{ display: 'flex' }}>
         <TextArea
           style={{ width: '100%', borderRadius: '5px', resize: 'none' }}
-          onChange={handleChange}
+          onChange={(e) => setContent(e.currentTarget.value)}
           value={content}
           placeholder='write some comments'
         />
