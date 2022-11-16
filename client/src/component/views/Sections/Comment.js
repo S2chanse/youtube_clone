@@ -2,27 +2,33 @@ import { Button } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import axios from 'axios';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router';
 
 export default function Comment() {
   const [content, setContent] = useState('');
+  const user = useSelector((state) => state.user);
+  let queryString = useParams();
+
   const handleChange = (e) => {
     setContent(e.currentTarget.value);
   };
   const onSubmit = async (e) => {
-    e.preventDeafult();
-    window.localStorage.getItem('userId');
-    if (
-      window.localStorage.getItem('userId') === null ||
-      window.localStorage.getItem('userId') === ''
-    ) {
+    e.preventDefault();
+
+    if (user._id === null) {
       alert('로그인 기능이 필요합니다.');
       return;
     }
     const params = {
       content,
+      writer: user._id,
+      postId: queryString.videoId,
     };
     try {
-      let res = axios.post('/api/comment/saveComment', params);
+      let res = await axios.post('/api/comment/saveComment', params);
+
+      console.log(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -45,7 +51,7 @@ export default function Comment() {
             ))} */}
 
       {/* Root Comment Form */}
-      <form style={{ display: 'flex' }} onClick={onSubmit}>
+      <form style={{ display: 'flex' }}>
         <TextArea
           style={{ width: '100%', borderRadius: '5px', resize: 'none' }}
           onChange={handleChange}
@@ -53,7 +59,10 @@ export default function Comment() {
           placeholder='write some comments'
         />
         <br />
-        <Button style={{ width: '20%', height: '52px' }} onClick={onSubmit}>
+        <Button
+          style={{ width: '20%', height: '52px' }}
+          onClick={(e) => onSubmit(e)}
+        >
           Submit
         </Button>
       </form>

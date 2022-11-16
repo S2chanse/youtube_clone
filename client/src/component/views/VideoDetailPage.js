@@ -11,7 +11,6 @@ export default function VideoDetailPage() {
   const [videoInfo, setVideoInfo] = useState({});
   const [comments, setComments] = useState([]);
   useEffect(() => {
-    console.log(params);
     findVideo();
   }, []);
 
