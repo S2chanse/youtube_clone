@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
-export default function SingleComment({ comment }) {
+export default function SingleComment({ comment, refreshFunction }) {
   const user = useSelector((state) => state.user);
   const [content, setContent] = useState('');
   const [repleFlag, setRepleFlag] = useState(false);
@@ -27,8 +27,7 @@ export default function SingleComment({ comment }) {
     };
     try {
       let res = await axios.post('/api/comment/saveComment', params);
-
-      console.log(res.data);
+      refreshFunction(res.data.result);
       setContent('');
     } catch (error) {
       console.log(error);

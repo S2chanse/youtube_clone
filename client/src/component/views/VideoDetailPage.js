@@ -34,6 +34,10 @@ export default function VideoDetailPage() {
       console.log(err);
     }
   };
+
+  const refreshFunction = (newComment) => {
+    setComments(comments.concat(newComment));
+  };
   return (
     <Row gutter={[16, 16]}>
       <Col lg={18} xs={24}>
@@ -59,7 +63,7 @@ export default function VideoDetailPage() {
               description={videoInfo.description}
             />
           </List.Item>
-          <Comment commentsList={comments} />;
+          <Comment commentsList={comments} refreshFunction={refreshFunction} />;
         </div>
       </Col>
       <Col lg={6} xs={24}>

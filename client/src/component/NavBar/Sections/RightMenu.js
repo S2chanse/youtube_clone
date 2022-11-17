@@ -10,6 +10,7 @@ import { clearUser } from '../../../_reducers/userSlice';
 
 function RightMenu(props) {
   const naviate = useNavigate();
+  const [loginFlag, setLoginFlag] = useState(false);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -44,17 +45,17 @@ function RightMenu(props) {
 
   return (
     <>
-      {!user.isLoading ? (
+      {!user.isAuth ? (
+        <>
+          <StyledLink to='/login'>Login</StyledLink>
+          <StyledLink to='/register'>Signup</StyledLink>
+        </>
+      ) : (
         <>
           <StyledLink to='/video/upload'>Upload</StyledLink>
           <Nav.Link eventKey={2} href='#' onClick={logoutHandler}>
             Logout
           </Nav.Link>
-        </>
-      ) : (
-        <>
-          <StyledLink to='/login'>Login</StyledLink>
-          <StyledLink to='/register'>Signup</StyledLink>
         </>
       )}
     </>

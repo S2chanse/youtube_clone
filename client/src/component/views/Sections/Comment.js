@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import SingleComment from './SingleComment';
 
-export default function Comment({ commentsList }) {
+export default function Comment({ commentsList, refreshFunction }) {
   const [content, setContent] = useState('');
   const user = useSelector((state) => state.user);
   let queryString = useParams();
@@ -26,7 +26,7 @@ export default function Comment({ commentsList }) {
     try {
       let res = await axios.post('/api/comment/saveComment', params);
 
-      console.log(res.data);
+      refreshFunction(res.data.result);
       setContent('');
     } catch (error) {
       console.log(error);
@@ -41,7 +41,13 @@ export default function Comment({ commentsList }) {
 
       {commentsList.map((comment, index) => {
         return (
-          !comment.responseTo && <SingleComment comment={comment} key={index} />
+          !comment.responseTo && (
+            <SingleComment
+              comment={comment}
+              key={index}
+              refreshFunction={refreshFunction}
+            />
+          )
         );
       })}
       {/* {console.log(props.CommentLists)}

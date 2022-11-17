@@ -51,6 +51,7 @@ function LoginPage(props) {
 
         if (!response.data.loginSuccess) {
           setFormErrorMessage('Config Your Id and Password');
+          return;
         }
         const response2 = await axios.get(`${USER_SERVER}/auth`);
         dispatch(loginUser(response2.data));
