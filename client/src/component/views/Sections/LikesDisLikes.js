@@ -38,7 +38,7 @@ export default function LikesDisLikes({ videoId, commentId }) {
     axios.post('/api/like/getDisLikes', variable).then((res) => {
       if (res.data.success) {
         //얼마나 많은 좋아야를 받았는가?
-        setLikes(res.data.results.length);
+        setDislikes(res.data.results.length);
         //내가 이미 좋아요를 눌렀는가?
         res.data.results.map((like) => {
           if (like.userId === user._id) {
@@ -47,14 +47,83 @@ export default function LikesDisLikes({ videoId, commentId }) {
         });
       }
     });
-  }, []);
+  }, [likeAction, disLikeAction]);
 
+  const HandlerOnLike = () => {
+    let variable = {};
+    variable.userId = window.localStorage.getItem('userId');
+
+    if (videoId) {
+      variable.videoId = videoId;
+    } else {
+      variable.commentId = commentId;
+    }
+    console.log(variable);
+    if (!likeAction) {
+      axios
+        .post('/api/like/upLike', variable)
+        .then((res) => {
+          if (res.data.success) {
+            setLikeAction(!likeAction);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      axios
+        .delete('/api/like/upLike', variable)
+        .then((res) => {
+          if (res.data.success) {
+            setLikeAction(!likeAction);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
+  const HandlerOnDisLike = () => {
+    let variable = {};
+    variable.userId = window.localStorage.getItem('userId');
+
+    if (videoId) {
+      variable.videoId = videoId;
+    } else {
+      variable.commentId = commentId;
+    }
+    console.log(variable);
+    if (!disLikeAction) {
+      axios
+        .post('/api/like/upDisLike', variable)
+        .then((res) => {
+          if (res.data.success) {
+            setDisLikeAction(!disLikeAction);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      axios
+        .delete('/api/like/upDisLike', variable)
+        .then((res) => {
+          if (res.data.success) {
+            setDisLikeAction(false);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
   return (
     <div>
       <span
         key='comment-basic-like'
         onClick={(e) => {
-          setLikeAction(!likeAction);
+          HandlerOnLike(e);
         }}
       >
         <Tooltip title='Like'>
@@ -66,7 +135,7 @@ export default function LikesDisLikes({ videoId, commentId }) {
       <span
         key='comment-basic-dislike'
         onClick={(e) => {
-          setDisLikeAction(!disLikeAction);
+          HandlerOnDisLike(e);
         }}
       >
         <Tooltip title='Dislike'>

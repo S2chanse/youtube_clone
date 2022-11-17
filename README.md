@@ -16,4 +16,4 @@ https://www.youtube.com/channel/UCFyXA9x8lpL3EYWeYhj4C4Q?view_as=subscriber
 
 ## 2022-11-17 작업
 
-1)좋아요 싫어요 버튼 템플릿 및 좋아요,싫어요 수 가져오는 router 생성
+1)좋아요 싫어요 버튼 템플릿 및 좋아요,싫어요 수 가져오는 router 생성 2)좋아요 싫어요 기능 추가
