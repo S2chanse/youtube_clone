@@ -5,6 +5,7 @@ import axios from 'axios';
 import SideVideo from './Sections/SideVideo';
 import Subscribe from './Sections/Subscribe';
 import Comment from './Sections/Comment';
+import LikesDisLikes from './Sections/LikesDisLikes';
 
 export default function VideoDetailPage() {
   let params = useParams();
@@ -52,7 +53,10 @@ export default function VideoDetailPage() {
           <List.Item
             actions={
               params.writerId !== window.localStorage.getItem('userId')
-                ? [<Subscribe userTo={params.writerId} />]
+                ? [
+                    <LikesDisLikes videoId={params.videoId} />,
+                    <Subscribe userTo={params.writerId} />,
+                  ]
                 : ''
             }
           >

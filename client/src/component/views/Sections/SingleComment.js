@@ -4,6 +4,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
+import LikesDisLikes from './LikesDisLikes';
 
 export default function SingleComment({ comment, refreshFunction }) {
   const user = useSelector((state) => state.user);
@@ -38,6 +39,7 @@ export default function SingleComment({ comment, refreshFunction }) {
     setRepleFlag(!repleFlag);
   };
   const actions = [
+    <LikesDisLikes commentId={comment._id} />,
     <span
       onClick={(e) => {
         onClickReply(e);
@@ -50,7 +52,7 @@ export default function SingleComment({ comment, refreshFunction }) {
   return (
     <div>
       <Comment
-        actions={actions}
+        actions={[actions]}
         author={comment.writer.name}
         avatar={<Avatar src={comment.writer.image} size={30} />}
         content={comment.content}
