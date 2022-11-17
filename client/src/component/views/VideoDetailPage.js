@@ -36,6 +36,7 @@ export default function VideoDetailPage() {
   };
 
   const refreshFunction = (newComment) => {
+    console.log('newComment', newComment);
     setComments(comments.concat(newComment));
   };
   return (
@@ -63,7 +64,7 @@ export default function VideoDetailPage() {
               description={videoInfo.description}
             />
           </List.Item>
-          <Comment commentsList={comments} refreshFunction={refreshFunction} />;
+          <Comment commentsList={comments} refreshFunction={refreshFunction} />
         </div>
       </Col>
       <Col lg={6} xs={24}>

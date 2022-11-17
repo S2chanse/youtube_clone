@@ -4,6 +4,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
+import ReplyComment from './ReplyComment';
 import SingleComment from './SingleComment';
 
 export default function Comment({ commentsList, refreshFunction }) {
@@ -42,11 +43,18 @@ export default function Comment({ commentsList, refreshFunction }) {
       {commentsList.map((comment, index) => {
         return (
           !comment.responseTo && (
-            <SingleComment
-              comment={comment}
-              key={index}
-              refreshFunction={refreshFunction}
-            />
+            <React.Fragment>
+              <SingleComment
+                comment={comment}
+                key={index}
+                refreshFunction={refreshFunction}
+              />
+              <ReplyComment
+                commentsList={commentsList}
+                parentCommentId={comment._id}
+                refreshFunction={refreshFunction}
+              />
+            </React.Fragment>
           )
         );
       })}

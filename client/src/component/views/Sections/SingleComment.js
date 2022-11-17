@@ -23,7 +23,7 @@ export default function SingleComment({ comment, refreshFunction }) {
       writer: user._id,
       postId: queryString.videoId,
       comment: comment.postId,
-      responseTo: comment.writer._id,
+      responseTo: comment._id,
     };
     try {
       let res = await axios.post('/api/comment/saveComment', params);
